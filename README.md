@@ -7,6 +7,7 @@ Architecture solution that you've made (with picture)
 How to get started and reproduce your system in a different AWS account 
 
 # Folder structure
+```
 .
 ├── docs                    # Documentation files (alternatively `doc`)
 │   ├── TOC.md              # Table of contents
@@ -18,3 +19,4 @@ How to get started and reproduce your system in a different AWS account
 ├── tools                   # Tools and utilities
 ├── LICENSE
 └── README.md
+```
