@@ -20,3 +20,11 @@ How to get started and reproduce your system in a different AWS account
 ├── LICENSE
 └── README.md
 ```
+
+# Dependencies
+Assuming you have Python 2.7.x
+```bash
+$ sudo easy_install pip
+$ sudo pip install BeautifulSoup4
+
+```
