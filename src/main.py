@@ -34,17 +34,17 @@ soup = BeautifulSoup(page, 'html.parser')
 caseTable = []
 headers = []
 headerRow = True
-secondRow = False
 line2 = True
 
 for tr in soup.find_all('tr'):
-    if headerRow:
-        ths = tr.find_all('th')
-        length = len(ths) # TODO is this used?
-        if DEBUG: print("Number of columns: " + str(length))
+    ths = tr.find_all('th')
+    if (headerRow and ths):
+        length = len(ths)
+        if length < 3:
+            continue
         if DEBUG: print("Column Headers:")
+        counter = 0 
         for th in ths:
-            counter = 0 
             label = th.text.rstrip()
             if label.isspace(): 
                 length -= 1
@@ -52,29 +52,13 @@ for tr in soup.find_all('tr'):
             if DEBUG: print("  " + label)
             headers.append(label)
             counter += 1
-        headerRow = False
-        secondRow = True
-        if DEBUG: print("Column Headers processed: " + str(counter))
+            headerRow = False
+        if DEBUG: 
+            print("Columns headers expected: " + str(length))
+            print("Column headers processed: " + str(counter))
         continue
     
     tds = tr.find_all('td')
-   
-    if secondRow:
-        length = len(tds) # TODO is this used?
-        if DEBUG: print("Number of columns in second row: " + str(length))
-        if DEBUG: print("Second row headers:")
-        for td in tds:
-            counter = 0 
-            label = td.text.rstrip()
-            if label.isspace(): continue
-            if DEBUG: print("  " + label)
-            headers.append(label)
-            counter += 1
-        secondRow = False
-        if DEBUG: print("Second row headers processed: " + str(counter))
-        continue
-
-    
     row = []
     # print("New record: ")
     for td in tds:
@@ -82,6 +66,5 @@ for tr in soup.find_all('tr'):
         content = td.text.rstrip()
         if content.isspace(): continue
         # print("  " + td.text)
-        row.append(content)
+        if content: row.append(content) # only appends non-empty lists
     caseTable.append(row)
-
