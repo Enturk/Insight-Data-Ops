@@ -2,6 +2,9 @@ import urllib2
 from bs4 import BeautifulSoup
 import os
 import sys
+from dotenv import dotenv_values
+
+HOST = os.getenv("POS")
 
 DEBUG = True
 
@@ -24,7 +27,7 @@ PATH = os.path.dirname(os.path.realpath(__file__))[:-3]
 
 
 # 9th circuit federal court of appeals
-quote_page = 'https://www.ca9.uscourts.gov/opinions/'
+quote_page = 'https://www.ca9.uscourts.gov/opinions/index.php?per_page=1000'
 page = urllib2.urlopen(quote_page)
 soup = BeautifulSoup(page, 'html.parser')
 #if DEBUG: print(soup.prettify())
@@ -32,18 +35,19 @@ soup = BeautifulSoup(page, 'html.parser')
 # Parse the table
 #TODO move into function
 caseTable = []
-headers = []
 headerRow = True
-line2 = True
+counter = 0 
 
 for tr in soup.find_all('tr'):
+    
+    headers = []
     ths = tr.find_all('th')
     if (headerRow and ths):
+        headCounter = 0
         length = len(ths)
         if length < 3:
             continue
         if DEBUG: print("Column Headers:")
-        counter = 0 
         for th in ths:
             label = th.text.rstrip()
             if label.isspace(): 
@@ -51,11 +55,13 @@ for tr in soup.find_all('tr'):
                 continue
             if DEBUG: print("  " + label)
             headers.append(label)
-            counter += 1
+            headCounter += 1
             headerRow = False
         if DEBUG: 
             print("Columns headers expected: " + str(length))
-            print("Column headers processed: " + str(counter))
+            print("Column headers processed: " + str(headCounter))
+        caseTable.append(headers)
+        counter += 1
         continue
     
     tds = tr.find_all('td')
@@ -66,5 +72,14 @@ for tr in soup.find_all('tr'):
         content = td.text.rstrip()
         if content.isspace(): continue
         # print("  " + td.text)
-        if content: row.append(content) # only appends non-empty lists
+        if content: 
+            row.append(content) # only appends non-empty lists
+    
+    counter += 1
     caseTable.append(row)
+    if DEBUG: print("Processing row " + str(counter))
+    
+    
+if DEBUG: print("Processed " + str(counter) + " rows of data, including a header.")
+    
+# send it to the RDS
