@@ -3,16 +3,8 @@ from bs4 import BeautifulSoup
 import os
 import sys
 from dotenv import load_dotenv, find_dotenv
-import boto3
+#import boto3
 import psycopg2
-
-# TODO fix these
-load_dotenv(find_dotenv())
-HOST = os.getenv("POSTGRES_HOST")
-USER = os.getenv("POSTGRES_USER")
-PASS = os.getenv("POSTGRES_PASSWORD")
-conn = psycopg2.connect(host=HOST, dbname="patent_data",
-                        user=USER, password=PASS)    
 
 DEBUG = True
 
@@ -21,14 +13,14 @@ PATH = os.path.dirname(os.path.realpath(__file__))[:-3]
 
 # open output file
 try:
-    os.chdir(PATH + "Unused/") 
+    os.chdir(PATH + "tools/") 
 except:
     if DEBUG: print("Output file folder doesn't exist, creating...")
 
 if DEBUG: x = 'a+'
 else: x = 'w+'
 try:
-    csv_file = open("sessionization.txt", x)
+    csv_file = open("data.csv", x)
     if DEBUG: print("Opened output file,")
 except:
     sys.exit("  Couldn't open output file.")
@@ -45,10 +37,12 @@ soup = BeautifulSoup(page, 'html.parser')
 caseTable = []
 headerRow = True
 counter = 0 
+schema = []
+rightTable = False
 
 for tr in soup.find_all('tr'):
     
-    schema = []
+    # process header
     ths = tr.find_all('th')
     if (headerRow and ths):
         headCounter = 0
@@ -64,14 +58,27 @@ for tr in soup.find_all('tr'):
             if DEBUG: print("  " + label)
             schema.append(label)
             headCounter += 1
-            headerRow = False
+        headerRow = False
+        caseTable = [] # delete earlier table stuff!
         if DEBUG: 
             print("Columns headers expected: " + str(length))
             print("Column headers processed: " + str(headCounter))
         counter += 1
         continue
-    
+
     tds = tr.find_all('td')
+    
+    # skip until right table
+    # if not rightTable:
+    #     for td in tds:
+    #         if td.text[:7] == "Results:" :
+    #             rightTable = True
+    #             break
+    #     continue
+
+    # skip weird rows, because there are many of them
+    if (len(tds) > len(schema)) or (len(tds) + 3 < len(schema)): continue
+
     row = []
     # print("New record: ")
     for td in tds:
@@ -84,32 +91,51 @@ for tr in soup.find_all('tr'):
     
     counter += 1
     caseTable.append(row)
-    if DEBUG: print("Processing row " + str(counter))
-    
+    if DEBUG and (counter%50 == 0): print("Processing row " + str(counter))
     
 if DEBUG: print("Processed " + str(counter) + " rows of data, including a header.")
-    
-# send it to the RDS
+
+# clean up data
+
+
+# write data to file for now
+import csv
+writer = csv.writer(csv_file)
+# writer.writerow(schema) #TODO what do we do with this?
+writer.writerows(caseTable)
+
+# TODO fix these
+# load_dotenv(find_dotenv())
+# HOST = os.getenv("POSTGRES_HOST")
+# USER = os.getenv("POSTGRES_USER")
+# PASS = os.getenv("POSTGRES_PASSWORD")
+# conn = psycopg2.connect(host=HOST, dbname="patent_data",
+#                         user=USER, password=PASS)    
+ 
+# TODO Clean up data to fit table
+
+
 # Create table
-cur = conn.cursor()
-cur.execute("""
-CREATE TABLE IF NOT EXISTS Circuit9(
-    patnum text PRIMARY KEY,
-    filedate date,
-    title text,
-    grantdate date,
-    owner text,
-    city text,
-    state text,
-    country text,
-    class text,
-    ipc text
-)
-""")
+# cur = conn.cursor()
+# cur.execute("""
+# CREATE TABLE IF NOT EXISTS Circuit9( # TODO make this with for header in schema
+#     CaseTitle text,
+#     CaseNo. text PRIMARY KEY,
+#     CaseOrigin text,
+#     AuthoringJudge text,
+#     CaseType text,
+#     CaseCode text,
+#     Datefiled date,
+# )
+# """)
 
-# Upload data
-
-cur.copy_from(open(csv_file), 'patents', columns=('patnum', 'filedate', 'title', 'grantdate', 'owner', 'city',
-                                                  'state', 'country', 'class', 'ipc'))
-conn.commit()
-conn.close()
+# # Upload data
+# cur.copy_from(open(csv_file), 'patents', columns=('CaseTitle', 
+#                                                     'CaseNo.', 
+#                                                     'CaseOrigin', 
+#                                                     'AuthoringJudge', 
+#                                                     'CaseType', 
+#                                                     'CaseCode',
+#                                                     'Datefiled'))
+# conn.commit()
+# conn.close()
