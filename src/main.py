@@ -17,8 +17,8 @@ try:
 except:
     if DEBUG: print("Output file folder doesn't exist, creating...")
 
-if DEBUG: x = 'a+'
-else: x = 'w+'
+if DEBUG: x = 'w+'
+else: x = 'a+'
 try:
     csv_file = open("data.csv", x)
     if DEBUG: print("Opened output file,")
@@ -77,7 +77,10 @@ for tr in soup.find_all('tr'):
     #     continue
 
     # skip weird rows, because there are many of them
-    if (len(tds) > len(schema)) or (len(tds) + 3 < len(schema)): continue
+    if (len(tds) > len(schema)) or (len(tds) + 3 < len(schema)): 
+        if DEBUG: print("Row starting with '" + tds[0].text + 
+        "' breaks with schema, which has " + str(len(schema)) + " columns.")
+        continue
 
     row = []
     # print("New record: ")
