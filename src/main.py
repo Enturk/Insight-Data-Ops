@@ -2,9 +2,17 @@ import urllib2
 from bs4 import BeautifulSoup
 import os
 import sys
-from dotenv import dotenv_values
+from dotenv import load_dotenv, find_dotenv
+import boto3
+import psycopg2
 
-HOST = os.getenv("POS")
+# TODO fix these
+load_dotenv(find_dotenv())
+HOST = os.getenv("POSTGRES_HOST")
+USER = os.getenv("POSTGRES_USER")
+PASS = os.getenv("POSTGRES_PASSWORD")
+conn = psycopg2.connect(host=HOST, dbname="patent_data",
+                        user=USER, password=PASS)    
 
 DEBUG = True
 
@@ -12,18 +20,18 @@ DEBUG = True
 PATH = os.path.dirname(os.path.realpath(__file__))[:-3]
 
 # open output file
-# try:
-#     os.chdir(PATH + "Unused/") 
-# except:
-#     if DEBUG: print("Output file folder doesn't exist, creating...")
+try:
+    os.chdir(PATH + "Unused/") 
+except:
+    if DEBUG: print("Output file folder doesn't exist, creating...")
 
-# if DEBUG: x = 'a+'
-# else: x = 'w+'
-# try:
-#     o = open("sessionization.txt", x)
-#     if DEBUG: print("Opened output file,")
-# except:
-#     sys.exit("  Couldn't open output file.")
+if DEBUG: x = 'a+'
+else: x = 'w+'
+try:
+    csv_file = open("sessionization.txt", x)
+    if DEBUG: print("Opened output file,")
+except:
+    sys.exit("  Couldn't open output file.")
 
 
 # 9th circuit federal court of appeals
@@ -40,7 +48,7 @@ counter = 0
 
 for tr in soup.find_all('tr'):
     
-    headers = []
+    schema = []
     ths = tr.find_all('th')
     if (headerRow and ths):
         headCounter = 0
@@ -54,13 +62,12 @@ for tr in soup.find_all('tr'):
                 length -= 1
                 continue
             if DEBUG: print("  " + label)
-            headers.append(label)
+            schema.append(label)
             headCounter += 1
             headerRow = False
         if DEBUG: 
             print("Columns headers expected: " + str(length))
             print("Column headers processed: " + str(headCounter))
-        caseTable.append(headers)
         counter += 1
         continue
     
@@ -83,3 +90,26 @@ for tr in soup.find_all('tr'):
 if DEBUG: print("Processed " + str(counter) + " rows of data, including a header.")
     
 # send it to the RDS
+# Create table
+cur = conn.cursor()
+cur.execute("""
+CREATE TABLE IF NOT EXISTS Circuit9(
+    patnum text PRIMARY KEY,
+    filedate date,
+    title text,
+    grantdate date,
+    owner text,
+    city text,
+    state text,
+    country text,
+    class text,
+    ipc text
+)
+""")
+
+# Upload data
+
+cur.copy_from(open(csv_file), 'patents', columns=('patnum', 'filedate', 'title', 'grantdate', 'owner', 'city',
+                                                  'state', 'country', 'class', 'ipc'))
+conn.commit()
+conn.close()

@@ -23,8 +23,27 @@ How to get started and reproduce your system in a different AWS account
 
 # Dependencies
 Assuming you have Python 2.7.x
+
+# TODO
+Create Jenkins instance
+First, do the following manually, but then have Jenkins do it:
+Create Terraform instance
+Install dependencies on Terraform instance:
 ```bash
+$ sudo apt-get update
+$ sudo apt-get upgrade
 $ sudo easy_install pip
 $ sudo pip install BeautifulSoup4
+$ sudo apt-get install git
+$ sudo pip install boto3 
+$ sudo pip install awscli
+$ sudo pip install -U python-dotenv
+$ sudo pip install psycopg2
 
 ```
+Pull git repo to Terraform instance
+Add public & secret keys, user info, region & host to .env file (not in this git)
+Connect Terraform instance to RDS instance
+Start python scraping script
+Python script pushes clean data to RDS instance
+RDS checks incoming data and integrates it into appropriate DB
