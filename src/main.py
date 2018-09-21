@@ -74,16 +74,17 @@ for tr in soup.find_all('tr'):
         if DEBUG: print("Row starting with '" + tds[0].text + 
         "' breaks with schema, which has " + str(len(schema)) + " columns.")
         continue
-
+    
+    # clean up the data file, just in case something got through...
     row = []
-    # print("New record: ")
+    
+    # if DEBUG: print("New record: ")
     for td in tds:
         # TODO trim tds[] elements?
         content = td.text.rstrip()
-        if content.isspace(): continue
-        # print("  " + td.text)
-        if content: 
-            row.append(content) # only appends non-empty lists
+        # if DEBUG: print("  " + td.text)
+        if content and not content.isspace(): # only appends non-empty data
+            row.append(content) 
     
     counter += 1
     caseTable.append(row)
@@ -91,34 +92,37 @@ for tr in soup.find_all('tr'):
     
 if DEBUG: print("Processed " + str(counter) + " rows of data, including a header.")
 
-# clean up data
+# TODO verify that data is clean & tidy
 
 
 # write data to file for now
 import csv
 writer = csv.writer(csv_file)
 writer.writerows(caseTable)
+csv_file.close()
 
 # TODO write schema to md file
-# writer = csv.writer(csv_file)
+# writer = csv.writer() #FIXME need filename and path
 # writer.writerow(schema)
 
 # The following is taken rom Stephen Wilson, who is a better man than I
-# TODO fix these
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 HOST = os.getenv("POSTGRES_HOST")
-print(HOST)
+if DEBUG: print("Host is: " + str(HOST))
 USER = os.getenv("POSTGRES_USER")
 PASS = os.getenv("POSTGRES_PASSWORD")
-conn = psycopg2.connect(host=HOST, dbname="patent_data",
+try: 
+    conn = psycopg2.connect(host=HOST, dbname="patent_data",
                         user=USER, password=PASS)    
- 
+except:
+    sys.exit("I am unable to connect to the database. I quit.")
+    
 # TODO Clean up data to fit table
 
 # Create table
 cur = conn.cursor()
-# TODO make this with for header in schema
+# TODO make this with for loop over headers in schema
 cur.execute("""
 CREATE TABLE IF NOT EXISTS public.cases( 
     CaseTitle text,
