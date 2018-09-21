@@ -2,7 +2,6 @@ import urllib2
 from bs4 import BeautifulSoup
 import os
 import sys
-from dotenv import load_dotenv, find_dotenv
 #import boto3
 import psycopg2
 
@@ -13,7 +12,7 @@ PATH = os.path.dirname(os.path.realpath(__file__))[:-3]
 
 # open output file
 try:
-    os.chdir(PATH + "tools/") 
+    os.chdir(PATH + "test/") 
 except:
     if DEBUG: print("Output file folder doesn't exist, creating...")
 
@@ -59,6 +58,7 @@ for tr in soup.find_all('tr'):
             schema.append(label)
             headCounter += 1
         headerRow = False
+        rightTable = True
         caseTable = [] # delete earlier table stuff!
         if DEBUG: 
             print("Columns headers expected: " + str(length))
@@ -66,18 +66,11 @@ for tr in soup.find_all('tr'):
         counter += 1
         continue
 
+    # moving on to rows
     tds = tr.find_all('td')
     
-    # skip until right table
-    # if not rightTable:
-    #     for td in tds:
-    #         if td.text[:7] == "Results:" :
-    #             rightTable = True
-    #             break
-    #     continue
-
-    # skip weird rows, because there are many of them
-    if (len(tds) > len(schema)) or (len(tds) + 3 < len(schema)): 
+    # skip bad rows, because there are many of them
+    if (not rightTable) or (len(tds) > len(schema)) or (len(tds) < len(schema)): 
         if DEBUG: print("Row starting with '" + tds[0].text + 
         "' breaks with schema, which has " + str(len(schema)) + " columns.")
         continue
@@ -85,7 +78,7 @@ for tr in soup.find_all('tr'):
     row = []
     # print("New record: ")
     for td in tds:
-        # TODO trim tds[] elements
+        # TODO trim tds[] elements?
         content = td.text.rstrip()
         if content.isspace(): continue
         # print("  " + td.text)
@@ -104,41 +97,47 @@ if DEBUG: print("Processed " + str(counter) + " rows of data, including a header
 # write data to file for now
 import csv
 writer = csv.writer(csv_file)
-# writer.writerow(schema) #TODO what do we do with this?
 writer.writerows(caseTable)
 
+# TODO write schema to md file
+# writer = csv.writer(csv_file)
+# writer.writerow(schema)
+
+# The following is taken rom Stephen Wilson, who is a better man than I
 # TODO fix these
-# load_dotenv(find_dotenv())
-# HOST = os.getenv("POSTGRES_HOST")
-# USER = os.getenv("POSTGRES_USER")
-# PASS = os.getenv("POSTGRES_PASSWORD")
-# conn = psycopg2.connect(host=HOST, dbname="patent_data",
-#                         user=USER, password=PASS)    
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+HOST = os.getenv("POSTGRES_HOST")
+print(HOST)
+USER = os.getenv("POSTGRES_USER")
+PASS = os.getenv("POSTGRES_PASSWORD")
+conn = psycopg2.connect(host=HOST, dbname="patent_data",
+                        user=USER, password=PASS)    
  
 # TODO Clean up data to fit table
 
-
 # Create table
-# cur = conn.cursor()
-# cur.execute("""
-# CREATE TABLE IF NOT EXISTS Circuit9( # TODO make this with for header in schema
-#     CaseTitle text,
-#     CaseNo. text PRIMARY KEY,
-#     CaseOrigin text,
-#     AuthoringJudge text,
-#     CaseType text,
-#     CaseCode text,
-#     Datefiled date,
-# )
-# """)
+cur = conn.cursor()
+# TODO make this with for header in schema
+cur.execute("""
+CREATE TABLE IF NOT EXISTS public.cases( 
+    CaseTitle text,
+    CaseNo text PRIMARY KEY,
+    CaseOrigin text,
+    AuthoringJudge text,
+    CaseType text,
+    CaseCode text,
+    Datefiled date
+)
+""")
 
-# # Upload data
-# cur.copy_from(open(csv_file), 'patents', columns=('CaseTitle', 
-#                                                     'CaseNo.', 
-#                                                     'CaseOrigin', 
-#                                                     'AuthoringJudge', 
-#                                                     'CaseType', 
-#                                                     'CaseCode',
-#                                                     'Datefiled'))
-# conn.commit()
-# conn.close()
+# Upload data
+cur.copy_from(open(csv_file), 'public.cases', columns=('CaseTitle', 
+                                                    'CaseNo', 
+                                                    'CaseOrigin', 
+                                                    'AuthoringJudge', 
+                                                    'CaseType', 
+                                                    'CaseCode',
+                                                    'Datefiled')) # Bad camel case in source. Don't blame me.
+conn.commit()
+conn.close()
