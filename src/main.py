@@ -16,10 +16,8 @@ try:
 except:
     if DEBUG: print("Output file folder doesn't exist, creating...")
 
-if DEBUG: x = 'w+'
-else: x = 'a+'
 try:
-    csv_file = open("data.csv", x)
+    csv_file = open("data.csv", 'r+')
     if DEBUG: print("Opened output file,")
 except:
     sys.exit("  Couldn't open output file.")
@@ -71,8 +69,9 @@ for tr in soup.find_all('tr'):
     
     # skip bad rows, because there are many of them
     if (not rightTable) or (len(tds) > len(schema)) or (len(tds) < len(schema)): 
-        if DEBUG: print("Row starting with '" + tds[0].text + 
-        "' breaks with schema, which has " + str(len(schema)) + " columns.")
+        if DEBUG: print("Discarding row starting with " + tds[0].text + 
+        "because it has " + len(tds) + " columns, and breaks with schema, which has " 
+        + str(len(schema)) + " columns.")
         continue
     
     # clean up the data file, just in case something got through...
@@ -88,9 +87,9 @@ for tr in soup.find_all('tr'):
     
     counter += 1
     caseTable.append(row)
-    if DEBUG and (counter%50 == 0): print("Processing row " + str(counter))
+    if DEBUG and (counter%100 == 0): print("Processing row " + str(counter) + " into list.")
     
-if DEBUG: print("Processed " + str(counter) + " rows of data, including a header.")
+if DEBUG: print("Processed " + str(counter) + " rows of data, plus a header.")
 
 # TODO verify that data is clean & tidy
 
@@ -99,7 +98,7 @@ if DEBUG: print("Processed " + str(counter) + " rows of data, including a header
 import csv
 writer = csv.writer(csv_file)
 writer.writerows(caseTable)
-csv_file.close()
+if DEBUG: print("Data now in csv_file.")
 
 # TODO write schema to md file
 # writer = csv.writer() #FIXME need filename and path
@@ -109,12 +108,17 @@ csv_file.close()
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 HOST = os.getenv("POSTGRES_HOST")
-if DEBUG: print("Host is: " + str(HOST))
 USER = os.getenv("POSTGRES_USER")
 PASS = os.getenv("POSTGRES_PASSWORD")
+# from IPython import embed
+# embed()
 try: 
-    conn = psycopg2.connect(host=HOST, dbname="patent_data",
-                        user=USER, password=PASS)    
+    if DEBUG: print("Attempting connection with host: " + str(HOST))
+    # note: make sure DB accepts incoming data from this IP
+    # on c9, check ip with: wget http://ipinfo.io/ip -qO -
+    conn = psycopg2.connect(host=HOST, dbname="Circuit9",
+                        user=USER, password=PASS) 
+    if DEBUG: print("   Connected!")
 except:
     sys.exit("I am unable to connect to the database. I quit.")
     
@@ -136,12 +140,15 @@ CREATE TABLE IF NOT EXISTS public.cases(
 """)
 
 # Upload data
-cur.copy_from(open(csv_file), 'public.cases', columns=('CaseTitle', 
+cur.copy_from(csv_file, 'public.cases', sep=',', columns=('CaseTitle', 
                                                     'CaseNo', 
                                                     'CaseOrigin', 
                                                     'AuthoringJudge', 
                                                     'CaseType', 
                                                     'CaseCode',
                                                     'Datefiled')) # Bad camel case in source. Don't blame me.
+if DEBUG: print("Uploaded csv file to DB. I'm done.")
+
 conn.commit()
 conn.close()
+csv_file.close()
