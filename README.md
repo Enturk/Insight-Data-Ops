@@ -4,7 +4,6 @@ This is the project that I worked on during my fellowship with Insight Data in N
 # TO DO in this Read moi
 Intro to business problem that you are trying to solve
 Architecture solution that you've made (with picture)
-How to get started and reproduce your system in a different AWS account 
 
 # Folder structure
 ```
@@ -24,8 +23,13 @@ How to get started and reproduce your system in a different AWS account
 # Dependencies
 Assuming you have Python 2.7.x
 
-# TODO
-* Create Jenkins instance
+# How to get this going:
+* Create Jenkins instance:
+```bash
+$ python get-pip.py --user
+$ pip install awscli --upgrade --user
+$ sudo apt-get install git
+```
 * First, do the following manually, but then have Jenkins do it:
 * Create Terraform instance
 * Install dependencies on Terraform instance:
@@ -34,7 +38,6 @@ $ sudo apt-get update
 $ sudo apt-get upgrade
 $ sudo easy_install pip
 $ sudo pip install BeautifulSoup4
-$ sudo apt-get install git
 $ sudo pip install boto3 
 $ sudo pip install awscli
 $ sudo pip install -U python-dotenv

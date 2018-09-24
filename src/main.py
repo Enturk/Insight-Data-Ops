@@ -70,11 +70,11 @@ for tr in soup.find_all('tr'):
     # skip bad rows, because there are many of them
     if (not rightTable) or (len(tds) > len(schema)) or (len(tds) < len(schema)): 
         if DEBUG: print("Discarding row starting with " + tds[0].text + 
-        "because it has " + len(tds) + " columns, and breaks with schema, which has " 
+        "because it has " + str(len(tds)) + " columns, and breaks with schema, which has " 
         + str(len(schema)) + " columns.")
         continue
     
-    # clean up the data file, just in case something got through...
+    # clean up the data list, just in case something got through...
     row = []
     
     # if DEBUG: print("New record: ")
@@ -104,14 +104,18 @@ if DEBUG: print("Data now in csv_file.")
 # writer = csv.writer() #FIXME need filename and path
 # writer.writerow(schema)
 
+# If you're really reading all of this, you should check this out:
+# https://www.youtube.com/watch?v=LVyOWbrxjHM
+
 # The following is taken rom Stephen Wilson, who is a better man than I
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 HOST = os.getenv("POSTGRES_HOST")
 USER = os.getenv("POSTGRES_USER")
 PASS = os.getenv("POSTGRES_PASSWORD")
-# from IPython import embed
-# embed()
+
+from IPython import embed
+embed()
 try: 
     if DEBUG: print("Attempting connection with host: " + str(HOST))
     # note: make sure DB accepts incoming data from this IP
@@ -127,10 +131,11 @@ except:
 # Create table
 cur = conn.cursor()
 # TODO make this with for loop over headers in schema
+# TODO need primary key!
 cur.execute("""
 CREATE TABLE IF NOT EXISTS public.cases( 
     CaseTitle text,
-    CaseNo text PRIMARY KEY,
+    CaseNo text,
     CaseOrigin text,
     AuthoringJudge text,
     CaseType text,
