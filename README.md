@@ -26,14 +26,19 @@ Assuming you have Python 2.7.x
 # How to get this going:
 * Create Jenkins instance:
 ```bash
-$ python get-pip.py --user
-$ pip install awscli --upgrade --user
-$ sudo apt-get install git
+$ sudo yum update –y
+$ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins.io/redhat/jenkins.repo
+$ sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+$ sudo service jenkins start
 ```
+* Service will start at http://your-server-address:8080
 * First, do the following manually, but then have Jenkins do it:
 * Create Terraform instance
 * Install dependencies on Terraform instance:
 ```bash
+$ python get-pip.py --user
+$ pip install awscli --upgrade --user
+$ sudo apt-get install git
 $ sudo apt-get update
 $ sudo apt-get upgrade
 $ sudo easy_install pip
