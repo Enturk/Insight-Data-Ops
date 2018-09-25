@@ -24,7 +24,7 @@ Architecture solution that you've made (with picture)
 Assuming you have Python 2.7.x
 
 # How to get this going:
-* Create Jenkins instance:
+* Jenkins:
 ```bash
 $ sudo yum update –y
 $ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins.io/redhat/jenkins.repo
@@ -32,7 +32,12 @@ $ sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
 $ sudo service jenkins start
 ```
 * Service will start at http://your-server-address:8080
-* First, do the following manually, but then have Jenkins do it:
+* Terraform:
+```bash
+$ sudo wget https://releases.hashicorp.com/terraform/0.8.5/terraform_0.8.5_linux_386.zip
+$ sudo unzip terraform_0.8.5_linux_386.zip
+$ sudo mv terraform /usr/local/bin/
+```
 * Create Terraform instance
 * Install dependencies on Terraform instance:
 ```bash
