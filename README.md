@@ -42,10 +42,11 @@ $ terraform plan
 $ terraform apply
 Enter a value: yes
 ```
-* AWS CLI:
+* AWS CLI & setup SSH:
 ```bash
 $ python get-pip.py --user
 $ pip install awscli --upgrade --user
+$ ssh-keygen -f [location] -P
 ```
 * Create Terraform instance (need to sanitize 
 ```bash
