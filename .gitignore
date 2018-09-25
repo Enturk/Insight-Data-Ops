@@ -1,3 +1,6 @@
 /Ignore/
 /test/data.csv
+/tools/terraform/aws.tf
+/tools/terraform/ssh/
+/tools/terraform/variables.tf
 .env
