@@ -42,11 +42,12 @@ $ terraform plan
 $ terraform apply
 Enter a value: yes
 ```
-* AWS CLI & setup SSH:
+* AWS CLI, git, setup SSH:
 ```bash
 $ python get-pip.py --user
 $ pip install awscli --upgrade --user
-$ ssh-keygen -f [location] -P
+$ sudo yum install git (and then yes)
+$ ssh-keygen -f [location] -P (needs testing and tweaking)
 ```
 * Create Terraform instance (need to sanitize 
 ```bash
