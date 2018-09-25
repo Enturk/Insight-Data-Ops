@@ -3,4 +3,5 @@
 /tools/terraform/aws.tf
 /tools/terraform/ssh/
 /tools/terraform/variables.tf
+/tools/terraform/.terraform/plugins/linux_amd64/terraform-provider-aws_v1.37.0_x4
 .env
