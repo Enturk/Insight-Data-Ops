@@ -1,5 +1,5 @@
 # Insight-Data-Ops
-This is the project that I worked on during my fellowship with Insight Data in NY. The goal is to be able to automagically spin up and spin down instances in AWS that do some data scraping. So, the plan is to 
+This is the project that I worked on during my fellowship with Insight Data in NY. The goal is to be able to automagically spin up and spin down instances in AWS that do some data scraping. Broad view is that the control machine copies or creates a new EC2 Terraform instance via Jenkins. The instance, monitored by Airflow, scrapes data from a website (this example uses the current cases listed on the US 9th Circuit Court of Appeals) using BeautifulSoup, puts that data in an RDS, and then spins down or terminates the instance.
 
 # TO DO in this Read moi
 Intro to business problem that you are trying to solve
