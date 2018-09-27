@@ -34,13 +34,9 @@ $ sudo service jenkins start
 * Service will start at http://your-server-address:8080
 * Terraform:
 ```bash
-$ sudo wget https://releases.hashicorp.com/terraform/0.8.5/terraform_0.8.5_linux_386.zip
-$ sudo unzip terraform_0.8.5_linux_386.zip
+$ wget https://releases.hashicorp.com/terraform/0.8.5/terraform_0.8.5_linux_386.zip
+$ unzip terraform_0.8.5_linux_386.zip
 $ sudo mv terraform /usr/local/bin/
-$ terraform init
-$ terraform plan
-$ terraform apply
-Enter a value: yes
 ```
 * AWS CLI, git, setup SSH:
 ```bash
@@ -54,7 +50,10 @@ $ ssh-keygen -f [location] -P (needs testing and tweaking)
 $ mkdir ~/terraform
 $ cd ~/terraform/
 $ {vi aws.tf}
+$ terraform init
 $ terraform plan
+$ terraform apply
+Enter a value: yes
 ```
 * Install stuff on Terraform instance:
 ```bash
