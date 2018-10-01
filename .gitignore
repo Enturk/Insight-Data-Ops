@@ -9,6 +9,7 @@
 /tools/terraform/ssh/
 /tools/terraform/variables.tf
 .env
+*.pem
 
 # unnecessary
 /tools/terraform/.terraform/plugins/linux_amd64/
