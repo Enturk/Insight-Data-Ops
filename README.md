@@ -40,6 +40,7 @@ $ chmod 700 ~/.ssh/*.pem
 
 * Setup control machine (but this in a bash script eventually):
 ```bash
+$ sudo apt-get update
 $ wget https://releases.hashicorp.com/terraform/0.8.5/terraform_0.8.5_linux_386.zip
 $ sudo apt-get install unzip
 $ unzip terraform_0.8.5_linux_386.zip
@@ -47,6 +48,8 @@ $ git clone https://github.com/Enturk/Insight-Data-Ops.git
 $ sudo mv terraform /usr/local/bin/
 $ sudo apt-get update --fix-missing
 $ sudo apt-get install python-setuptools -y
+$ curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+$ sudo -H python get-pip.py
 $ pip install --upgrade Flask
 $ echo "export AIRFLOW_HOME=~/airflow" >> ~/.bashrc
 $ echo "export SLUGIFY_USES_TEXT_UNIDECODE=yes" >> ~/.bashrc
