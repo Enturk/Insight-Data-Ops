@@ -1,11 +1,9 @@
 # Insight-Data-Ops
 This is the project that I worked on during my fellowship with Insight Data in NY. The goal is to be able to automagically spin up and spin down instances in AWS that do some data scraping. Broad view is that the control machine copies or creates a new EC2 Terraform instance via Jenkins. The instance, monitored by Airflow, scrapes data from a website (this example uses the current cases listed on the US 9th Circuit Court of Appeals) using BeautifulSoup, puts that data in an RDS, and then spins down or terminates the instance.
 
-# TO DO in this Read moi
-Intro to business problem that you are trying to solve
-Architecture solution that you've made (with picture)
+# Architecture Solution
 
-# Folder structure
+# Folder Structure
 ```
 .
 ├── docs                    # Documentation files (alternatively `doc`)
@@ -24,17 +22,28 @@ Architecture solution that you've made (with picture)
 Assuming you have Python 2.7.x or 3.6.x
 
 # How to get this going:
-* As appropriate, add public & secret keys, user info, region & host to .env file (not discussed for security reasons...)
+* As appropriate, produce or download public & secret keys, user info, region & host to .env file (not discussed for security reasons...). Dotenv file format should be: 
+```bash
+export ws_access_key_id=
+export aws_secret_access_key=
+export region=
+export POSTGRES_HOST=
+export POSTGRES_USER=
+export POSTGRES_PASSWORD=
+```
+
 * Get pem keypair into right place:
 ```bash
 $ mv *.pem ~/.ssh/*.pem
 $ chmod 700 ~/.ssh/*.pem
 ```
-* Terraform from control machine:
+
+* Setup control machine (but this in a bash script eventually):
 ```bash
 $ wget https://releases.hashicorp.com/terraform/0.8.5/terraform_0.8.5_linux_386.zip
 $ sudo apt-get install unzip
 $ unzip terraform_0.8.5_linux_386.zip
+$ git clone https://github.com/Enturk/Insight-Data-Ops.git
 $ sudo mv terraform /usr/local/bin/
 $ sudo apt-get update --fix-missing
 $ sudo easy_install pip
