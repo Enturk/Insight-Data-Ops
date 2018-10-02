@@ -48,13 +48,14 @@ $ git clone https://github.com/Enturk/Insight-Data-Ops.git
 $ sudo mv terraform /usr/local/bin/
 $ sudo apt-get update --fix-missing
 $ sudo apt-get install python-setuptools -y
+$ pip install --upgrade setuptools --user
 $ curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 $ sudo -H python get-pip.py
 $ pip install --upgrade Flask --user # get version 0.12.4
 $ echo "export AIRFLOW_HOME=~/airflow" >> ~/.bashrc
 $ echo "export SLUGIFY_USES_TEXT_UNIDECODE=yes" >> ~/.bashrc
 $ source ~/.bashrc
-$ sudo pip install apache-airflow --user --no-warn-script-location
+$ pip install apache-airflow --user --no-warn-script-location
 $ ln -s /home/ubuntu/.local/lib/python2.7/site-packages/airflow/ airflow
 $ cd */airflow
 $ ./airflow initdb
