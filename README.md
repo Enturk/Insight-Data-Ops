@@ -33,6 +33,7 @@ $ chmod 700 ~/.ssh/*.pem
 * Terraform from control machine:
 ```bash
 $ wget https://releases.hashicorp.com/terraform/0.8.5/terraform_0.8.5_linux_386.zip
+$ sudo apt-get install unzip
 $ unzip terraform_0.8.5_linux_386.zip
 $ sudo mv terraform /usr/local/bin/
 $ sudo apt-get update --fix-missing
