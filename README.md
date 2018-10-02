@@ -21,56 +21,33 @@ Architecture solution that you've made (with picture)
 ```
 
 # Dependencies
-Assuming you have Python 2.7.x
+Assuming you have Python 2.7.x or 3.6.x
 
 # How to get this going:
-* Jenkins:
+* As appropriate, add public & secret keys, user info, region & host to .env file (not discussed for security reasons...)
+* Get pem keypair into right place:
 ```bash
-$ sudo yum update –y
-$ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins.io/redhat/jenkins.repo
-$ sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
-$ sudo service jenkins start
+$ mv *.pem ~/.ssh/*.pem
+$ chmod 700 ~/.ssh/*.pem
 ```
-* Service will start at http://your-server-address:8080
-* Terraform:
+* Terraform from control machine:
 ```bash
 $ wget https://releases.hashicorp.com/terraform/0.8.5/terraform_0.8.5_linux_386.zip
 $ unzip terraform_0.8.5_linux_386.zip
 $ sudo mv terraform /usr/local/bin/
-```
-* AWS CLI, git, setup SSH:
-```bash
-$ python get-pip.py --user
-$ pip install awscli --upgrade --user
-$ sudo yum install git (and then yes)
-$ ssh-keygen -f [location] -P (needs testing and tweaking)
-```
-* Create Terraform instance (need to sanitize 
-```bash
-$ mkdir ~/terraform
-$ cd ~/terraform/
-$ {vi aws.tf}
-$ terraform init
-$ terraform plan
-$ terraform apply
-Enter a value: yes
-```
-* Install stuff on Terraform instance:
-```bash
-$ sudo apt-get install git
-$ sudo apt-get update
-$ sudo apt-get upgrade
+$ sudo apt-get update --fix-missing
 $ sudo easy_install pip
-$ sudo pip install BeautifulSoup4
-$ sudo pip install boto3 
-$ sudo pip install awscli
-$ sudo pip install -U python-dotenv
-$ sudo pip install psycopg2
-
+$ pip install --upgrade Flask
+$ echo "export AIRFLOW_HOME=~/airflow" >> .bashrc
+$ echo "export SLUGIFY_USES_TEXT_UNIDECODE=yes" >> .bashrc
+$ source .bashrc
+$ sudo pip install apache-airflow --user --no-warn-script-location
+$ ln -s /home/ubuntu/.local/lib/python2.7/site-packages/airflow/ airflow
+$ cd */airflow
+$ ./airflow initdb
+$ wget http://ipinfo.io/ip -qO - #this just gets your ip for the server...
+$ ./airflow webserver -p 8080
+$ ./src/newTerraInst.sh
 ```
-* Pull git repo to Terraform instance
-* Add public & secret keys, user info, region & host to .env file (not in this git)
-* Connect Terraform instance to RDS instance
-* Start python scraping script
 * Python script pushes clean data to RDS instance
 * RDS checks incoming data and integrates it into appropriate DB

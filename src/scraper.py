@@ -132,28 +132,30 @@ except:
 cur = conn.cursor()
 # TODO make this with for loop over headers in schema
 # TODO need primary key!
-cur.execute("""
-CREATE TABLE IF NOT EXISTS public.cases( 
-    CaseTitle text,
-    CaseNo text,
-    CaseOrigin text,
-    AuthoringJudge text,
-    CaseType text,
-    CaseCode text,
-    Datefiled date
-)
-""")
-
-# Upload data
-cur.copy_from(csv_file, 'public.cases', sep=',', columns=('CaseTitle', 
-                                                    'CaseNo', 
-                                                    'CaseOrigin', 
-                                                    'AuthoringJudge', 
-                                                    'CaseType', 
-                                                    'CaseCode',
-                                                    'Datefiled')) # Bad camel case in source. Don't blame me.
-if DEBUG: print("Uploaded csv file to DB. I'm done.")
-
+try: 
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS public.cases( 
+        CaseTitle text,
+        CaseNo text,
+        CaseOrigin text,
+        AuthoringJudge text,
+        CaseType text,
+        CaseCode text,
+        Datefiled date
+    )
+    """)
+    
+    # Upload data
+    cur.copy_from(csv_file, 'public.cases', sep=',', columns=('CaseTitle', 
+                                                        'CaseNo', 
+                                                        'CaseOrigin', 
+                                                        'AuthoringJudge', 
+                                                        'CaseType', 
+                                                        'CaseCode',
+                                                        'Datefiled')) # Bad camel case in source. Don't blame me.
+    if DEBUG: print("Uploaded csv file to DB. I'm done.")
+except: 
+    print("Upload to DB failed. I quit.")
 conn.commit()
 conn.close()
 csv_file.close()

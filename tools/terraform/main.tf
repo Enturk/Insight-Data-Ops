@@ -1,7 +1,9 @@
 resource "aws_instance" "pipe-instance" {
-  ami             = "${data.aws_ami.ubuntu.id}"
+  ami             = "ami-e24b7d9d"
   instance_type   = "t2.micro"
   key_name = "terraformer"
+  user_data = "${file("/home/ubuntu/workspace/src/scraper_setup.sh")}"
+
   tags {
     Name = "pipe-instance"
   }

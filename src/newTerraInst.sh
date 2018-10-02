@@ -18,7 +18,7 @@ ip=$(terraform output ip)
 # Running script once on instance: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html
 # To run on restart, use this: https://aws.amazon.com/premiumsupport/knowledge-center/execute-user-data-ec2/
 
-ip_with_dashes= "$ip" | tr . -
+ip_with_dashes= "${ip//./-}"
 ssh_target=ubuntu@ec2-$ip.compute-1.amazonaws.com
 
 echo "Copy & paste these three lines into one bash command line:"
