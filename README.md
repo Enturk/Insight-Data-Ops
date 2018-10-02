@@ -46,11 +46,11 @@ $ unzip terraform_0.8.5_linux_386.zip
 $ git clone https://github.com/Enturk/Insight-Data-Ops.git
 $ sudo mv terraform /usr/local/bin/
 $ sudo apt-get update --fix-missing
-$ sudo easy_install pip
+$ sudo apt-get install python-setuptools -y
 $ pip install --upgrade Flask
-$ echo "export AIRFLOW_HOME=~/airflow" >> .bashrc
-$ echo "export SLUGIFY_USES_TEXT_UNIDECODE=yes" >> .bashrc
-$ source .bashrc
+$ echo "export AIRFLOW_HOME=~/airflow" >> ~/.bashrc
+$ echo "export SLUGIFY_USES_TEXT_UNIDECODE=yes" >> ~/.bashrc
+$ source ~/.bashrc
 $ sudo pip install apache-airflow --user --no-warn-script-location
 $ ln -s /home/ubuntu/.local/lib/python2.7/site-packages/airflow/ airflow
 $ cd */airflow
