@@ -50,7 +50,7 @@ $ sudo apt-get update --fix-missing
 $ sudo apt-get install python-setuptools -y
 $ curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 $ sudo -H python get-pip.py
-$ pip install --upgrade Flask --user
+$ pip install --upgrade Flask --user # get version 0.12.4
 $ echo "export AIRFLOW_HOME=~/airflow" >> ~/.bashrc
 $ echo "export SLUGIFY_USES_TEXT_UNIDECODE=yes" >> ~/.bashrc
 $ source ~/.bashrc
