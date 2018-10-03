@@ -87,9 +87,10 @@ $ # new process
 ```
 * Script to create (and destroy) new terraform instance and injects requirements to run scraper:
 ```bash
-$ chmod +x /src/newTerraInst.sh
+$ chmod +x ~/Insight-Data-Ops-src/newTerraInst.sh
 $ export PATH=$PATH:~/Insight-Data-Ops/src/ # or appropriate path
-$ ./src/newTerraInst.sh
+$ cd 
+$ ./Insight-Data-Ops/src/newTerraInst.sh
 ```
 * Python script pushes clean data to RDS instance
 * RDS checks incoming data and integrates it into appropriate DB
