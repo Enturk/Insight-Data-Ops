@@ -75,7 +75,6 @@ $ sudo apt-get install build-essential autoconf libtool pkg-config python-opengl
 $ pip install cryptography --user
 $ pip install apache-airflow --user
 $ pip install apache-airflow[postgres,s3] --user
-$ rm airflow/airflow.cfg # probably unnecessary with the next line...
 $ cp ~/Insight-Data-Ops/tools/airflow/airflow.cfg airflow.cfg
 $ airflow initdb
 $ wget http://ipinfo.io/ip -qO - #this just gets your ip for the server...
