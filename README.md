@@ -77,6 +77,7 @@ $ cd tools/airflow/
 $ pip install apache-airflow --user
 $ ln -s /home/ubuntu/.local/lib/python2.7/site-packages/airflow/ airflow
 $ cd */airflow
+$ pip install apache-airflow[postgres,s3] --user
 $ airflow initdb
 $ wget http://ipinfo.io/ip -qO - #this just gets your ip for the server...
 $ airflow webserver -p 8080
