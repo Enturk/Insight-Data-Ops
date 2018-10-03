@@ -11,8 +11,9 @@ pip install BeautifulSoup4
 pip install boto3
 pip install -U python-dotenv
 pip install psycopg2
+pip install psycopg2-binary
 
 # do the thing we're her to do
+cd /usr/src/
 wget https://raw.githubusercontent.com/Enturk/Insight-Data-Ops/master/src/scraper.py
 python scraper.py
-
