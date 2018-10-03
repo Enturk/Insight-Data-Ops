@@ -46,6 +46,22 @@ $ sudo apt-get install unzip
 $ unzip terraform_0.8.5_linux_386.zip
 $ git clone https://github.com/Enturk/Insight-Data-Ops.git
 $ sudo mv terraform /usr/local/bin/
+```
+* Create tools/terraform/variables.tf with this format:
+```bash
+# AWS Config
+variable "aws_access_key" {
+  default = "XXXXXXXXXX" # change to appropriate value
+}
+variable "aws_secret_key" {
+  default = "XXXXXXXXXXXXXXXXXXXXX" # change to appropriate value
+}
+variable "aws_region" {
+  default = "us-east-1" # change to appropriate value
+}
+```
+* Airflow:
+```bash
 $ sudo apt-get update --fix-missing
 $ sudo apt-get install python-setuptools -y
 $ pip install --upgrade setuptools --user
@@ -67,6 +83,9 @@ $ airflow webserver -p 8080
 $ # new process
 $ airflow scheduler
 $ # new process
+```
+* Script to create (and destroy) new terraform instance:
+```bash
 $ ./src/newTerraInst.sh
 ```
 * Python script pushes clean data to RDS instance
