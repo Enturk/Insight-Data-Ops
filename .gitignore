@@ -4,12 +4,17 @@
 # Compiled files
 *.tfstate
 *.tfstate.backup
+get-pip.py
 
-# sensitive
+# Installed from elsewhere
+/tools/terraform/terraform
+/tools/airflow/airflow
+
+# Sensitive
 /tools/terraform/ssh/
 /tools/terraform/variables.tf
 .env
 *.pem
 
-# unnecessary
+# Unnecessary
 /tools/terraform/.terraform/plugins/linux_amd64/
