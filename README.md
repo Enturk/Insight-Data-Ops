@@ -86,7 +86,7 @@ $ # new process
 ```
 * Script to create (and destroy) new terraform instance and injects requirements to run scraper:
 ```bash
-$ chmod +x ~/Insight-Data-Ops-src/newTerraInst.sh
+$ chmod +x ~/Insight-Data-Ops/src/newTerraInst.sh
 $ export PATH=$PATH:~/Insight-Data-Ops/src/ # or appropriate path
 $ cd 
 $ ./Insight-Data-Ops/src/newTerraInst.sh
