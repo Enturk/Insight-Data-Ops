@@ -85,8 +85,10 @@ $ # new process
 $ airflow scheduler
 $ # new process
 ```
-* Script to create (and destroy) new terraform instance:
+* Script to create (and destroy) new terraform instance and injects requirements to run scraper:
 ```bash
+$ chmod +x /src/newTerraInst.sh
+$ export PATH=$PATH:~/Insight-Data-Ops/src/ # or appropriate path
 $ ./src/newTerraInst.sh
 ```
 * Python script pushes clean data to RDS instance
