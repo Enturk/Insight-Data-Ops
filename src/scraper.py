@@ -8,7 +8,7 @@ import psycopg2
 DEBUG = True
 
 # get main directory path
-PATH = os.path.dirname(os.path.realpath(__file__))[]
+PATH = os.path.dirname(os.path.realpath(__file__))[:]
 
 # open output file
 try:
