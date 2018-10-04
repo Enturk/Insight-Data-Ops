@@ -2,8 +2,7 @@
 /test/data.csv
 
 # Compiled files
-*.tfstate
-*.tfstate.backup
+**/*.tfstate*
 get-pip.py
 
 # Installed from elsewhere
@@ -13,8 +12,8 @@ get-pip.py
 # Sensitive
 /tools/terraform/ssh/
 /tools/terraform/variables.tf
-.env
-*.pem
+**/*.env
+**/*.pem
 
 # Unnecessary
 /tools/terraform/.terraform/plugins/linux_amd64/

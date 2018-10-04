@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # cd otherwise at /
-cd ~
+cd /tmp/
 
 # install necessary things
 sudo apt-get update
@@ -14,6 +14,5 @@ pip install psycopg2
 pip install psycopg2-binary
 
 # do the thing we're her to do
-cd /usr/src/
 wget https://raw.githubusercontent.com/Enturk/Insight-Data-Ops/master/src/scraper.py
 python scraper.py
