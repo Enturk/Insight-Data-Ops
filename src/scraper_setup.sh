@@ -15,4 +15,5 @@ pip install psycopg2-binary
 
 # do the thing we're her to do
 wget https://raw.githubusercontent.com/Enturk/Insight-Data-Ops/master/src/scraper.py
+sudo chmod +x scraper.py
 python scraper.py
