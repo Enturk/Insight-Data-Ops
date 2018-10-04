@@ -7,8 +7,6 @@ from airflow.operators.bash_operator import BashOperator
 from datetime import datetime, timedelta
 import os
 
-InsightDir = os.getcwd()
-
 default_args = {
     'owner': 'nazim',
     'depends_on_past': False,
@@ -22,11 +20,15 @@ default_args = {
     # 'pool': 'backfill',
     # 'priority_weight': 10,
     'end_date': datetime(2018, 12, 1),
-    'schedule_interval': '@weekly',
+    #'schedule_interval': '@weekly',
 }
 
-dag = DAG(
-    'terraflow', default_args=default_args,schedule_interval=timedelta(1))
+bashOps = """cd ~/Insight-Data-Ops/src/
+./newTerraInst.sh
+ """
+# add after default args to thoroughly test changes:
+# , schedule_interval=timedelta(minutes = 5)
+dag = DAG('terraflow', default_args=default_args, schedule_interval=timedelta(minutes = 5))
 
 # Operations
 t1 = BashOperator(
@@ -36,7 +38,7 @@ t1 = BashOperator(
 
 t2 = BashOperator(
     task_id='newTerraInst',
-    bash_command='.' + InsightDir + '/src/newTerraInst.sh',
+    bash_command=bashOps,
     dag=dag)
 
 t2.set_upstream(t1)

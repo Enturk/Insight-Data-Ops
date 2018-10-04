@@ -20,9 +20,10 @@ except:
 try:
     csv_file = open("data.csv", 'r+')
     if DEBUG: print("Opened output file,")
+except IOError as e:
+    print "Can't open output file. Path is " + PATH + " I/O error({0}): {1} ".format(e.errno, e.strerror)
 except:
-    sys.exit("  Couldn't open output file.")
-
+    sys.exit("Can't open output file. Path is " + PATH + " Unexpected error: " + sys.exc_info()[0])
 
 # 9th circuit federal court of appeals
 quote_page = 'https://www.ca9.uscourts.gov/opinions/index.php?per_page=1000'
