@@ -59,6 +59,15 @@ variable "aws_secret_key" {
 variable "aws_region" {
   default = "us-east-1" # change to appropriate value
 }
+variable "postgres_host" {
+   default = "XXXXXXXXX.XXXXXXXXXXXX.us-east-1.rds.amazonaws.com" # change to appropriate value
+}
+variable "postgres_user" {
+   default = "XXXXXXX" # change to appropriate value
+}
+variable "postgres_password" {
+   default = "XXXXXXXXXXXXXX" # change to appropriate value
+}
 ```
 * Airflow:
 ```bash
