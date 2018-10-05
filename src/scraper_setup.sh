@@ -12,10 +12,12 @@ pip install boto3
 pip install -U python-dotenv
 pip install psycopg2
 pip install psycopg2-binary
+pip install ipython
 
 # do the thing we're her to do
 mkdir test
 touch test/data.csv
+sudo chown ubuntu test/data.csv
 wget https://raw.githubusercontent.com/Enturk/Insight-Data-Ops/master/src/scraper.py
-sudo chmod +x scraper.py
+# sudo chmod +x scraper.py # only necessary if I want to ./ execute
 python scraper.py

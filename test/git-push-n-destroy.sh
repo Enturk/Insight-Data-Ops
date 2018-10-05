@@ -17,4 +17,5 @@ git commit -m "$1"
 git push
 
 # DESTROY MARS!
+cd tools/terraform/
 terraform destroy -auto-approve
