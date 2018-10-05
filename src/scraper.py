@@ -107,18 +107,18 @@ if DEBUG: print("Data now in csv_file.")
 # writer = csv.writer() #FIXME need filename and path
 # writer.writerow(schema)
 
-# If you're really reading all of this, you should check this out:
+# If you're reading all of this, you should check this out:
 # https://www.youtube.com/watch?v=LVyOWbrxjHM
 
-# The following is taken rom Stephen Wilson, who is a better man than I
+# The following is taken from stephenjwilson, who is a better man than I
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 HOST = os.getenv("POSTGRES_HOST")
 USER = os.getenv("POSTGRES_USER")
 PASS = os.getenv("POSTGRES_PASSWORD")
 
-from IPython import embed
-embed()
+# from IPython import embed
+# embed()
 try:
     if DEBUG: print("Attempting connection with host: " + str(HOST))
     # note: make sure DB accepts incoming data from this IP
