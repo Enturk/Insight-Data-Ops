@@ -78,10 +78,8 @@ $ pip install apache-airflow[postgres,s3] --user
 $ cp ~/Insight-Data-Ops/tools/airflow/airflow.cfg airflow.cfg
 $ airflow initdb
 $ wget http://ipinfo.io/ip -qO - #this just gets your ip for the server...
-$ airflow webserver -p 8080
-$ # new process
-$ airflow scheduler
-$ # new process
+$ airflow webserver -p 8080 &
+$ airflow scheduler &
 ```
 * Script to create (and destroy) new terraform instance and injects requirements to run scraper:
 ```bash
