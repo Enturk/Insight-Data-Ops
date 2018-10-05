@@ -28,7 +28,7 @@ bashOps = """cd ~/Insight-Data-Ops/src/
  """
 # add after default args to thoroughly test changes:
 # , schedule_interval=timedelta(minutes = 5)
-dag = DAG('terraflow', default_args=default_args, schedule_interval=timedelta(minutes = 5))
+dag = DAG('terraflow', default_args=default_args, schedule_interval=timedelta(minutes = 1))
 
 # Operations
 t1 = BashOperator(
