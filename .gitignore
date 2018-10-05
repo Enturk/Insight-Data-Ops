@@ -2,6 +2,7 @@
 /test/data.csv
 
 # Compiled files
+*.tfstate
 *.tfstate*
 get-pip.py
 
