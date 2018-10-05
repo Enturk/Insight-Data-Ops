@@ -12,16 +12,17 @@ PATH = os.path.dirname(os.path.realpath(__file__))[:]
 
 # open output file
 try:
-    os.chdir(PATH + "test/")
+    os.chdir(PATH + "/test/")
 except:
     if DEBUG: print("Output file folder doesn't exist, creating...")
     os.makedirs(PATH + "test/")
+    os.chdir(PATH + "/test/"
 
 try:
     csv_file = open("data.csv", 'r+')
     if DEBUG: print("Opened output file,")
 except IOError as e:
-    sys.exit( "Can't open output file. Path is " + PATH + " I/O error({0}): {1} ".format(e.errno, e.strerror))
+    sys.exit( "Can't open output file. Path is " + os.path.dirname(os.path.realpath(__file__))[:] + " and should be "+ PATH + " I/O error({0}): {1} ".format(e.errno, e.strerror))
 except:
     sys.exit("Can't open output file. Path is " + PATH + " Unexpected error: " + sys.exc_info()[0])
 
