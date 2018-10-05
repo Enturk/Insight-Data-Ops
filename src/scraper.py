@@ -19,12 +19,12 @@ except:
     os.chdir(PATH + "/test/")
 
 try:
-    csv_file = open("data.csv", 'r+')
+    csv_file = open("data.csv", 'a+')
     if DEBUG: print("Opened output file,")
 except IOError as e:
-    sys.exit( "Can't open output file. Path is " + os.path.dirname(os.path.realpath(__file__))[:] + " and should be "+ PATH + " I/O error({0}): {1} ".format(e.errno, e.strerror))
+    sys.exit( "Can't open output file. Path is " + os.path.dirname(os.path.realpath(__file__))[:] + " and base PATH is "+ PATH + "\nI/O error({0}): {1} ".format(e.errno, e.strerror))
 except:
-    sys.exit("Can't open output file. Path is " + PATH + " Unexpected error: " + sys.exc_info()[0])
+    sys.exit("Can't open output file. PATH is " + PATH + " Unexpected error: " + sys.exc_info()[0])
 
 # 9th circuit federal court of appeals
 quote_page = 'https://www.ca9.uscourts.gov/opinions/index.php?per_page=1000'
