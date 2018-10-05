@@ -16,7 +16,7 @@ try:
 except:
     if DEBUG: print("Output file folder doesn't exist, creating...")
     os.makedirs(PATH + "test/")
-    os.chdir(PATH + "/test/"
+    os.chdir(PATH + "/test/")
 
 try:
     csv_file = open("data.csv", 'r+')
