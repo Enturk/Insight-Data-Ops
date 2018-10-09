@@ -6,7 +6,7 @@ resource "aws_instance" "pipe-instance" {
 
   # Allow AWS infrastructure metadata to propagate.
   # provisioner "local-exec" {
-    command = "sleep 15"
+    # command = "sleep 15"
   # }
 
   # necessary if you want to use provisioner
