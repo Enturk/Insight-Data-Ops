@@ -19,7 +19,8 @@ echo "Copy & paste this into bash command line to ssh into instance:"
 echo 'ssh -i ~/.ssh/terraformer.pem -o "StrictHostKeyChecking no" '$ssh_target
 
  # Transfer env variables
-scp ~/Insight-Data-Ops/.env $ssh_target:/tmp/
+scp -i ~/.ssh/terraformer.pem -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" ~/Insight-Data-Ops/.env $ssh_target:/tmp/
+# cat ~/.ssh/id_rsa.pub | ssh -o "StrictHostKeyChecking no" $ssh_target 'cat >> ~/.ssh/authorized_keys' &
 
 # need to wait
 
