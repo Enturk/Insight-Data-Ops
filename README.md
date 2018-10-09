@@ -1,7 +1,11 @@
 # Insight-Data-Ops
 This is the project that I worked on during my fellowship with Insight Data in NY. The goal is to be able to automagically spin up and spin down instances in AWS that do some data scraping. Broad view is that the control machine copies or creates a new EC2 Terraform instance via Jenkins. The instance, monitored by Airflow, scrapes data from a website (this example uses the current cases listed on the US 9th Circuit Court of Appeals) using BeautifulSoup, puts that data in an RDS, and then spins down or terminates the instance.
 
-# Architecture Solution
+# Workflow Overview
+
+A control machine, running Airflow, monitors Terraform, which is currently setup to recreate instances when I update Github and destroy the instances. This recreation works as outlined below: Terraform re-creates an instance, copies over the environment variables, injects a startup script, which in turn sets up the new instance to run the scraping script and pulls it from github. The python script scrapes the data from a court website, and then pushes it to an AWS relational database.
+
+![workflow: Airflow triggers Terraform, which creates a new instance, which pulls the python scraping script from github, the scraping script gets the data from the court website, and pushes it to the AWS relational DB.](https://raw.githubusercontent.com/Enturk/Insight-Data-Ops/master/Insight-Data-Ops_workflow.png)
 
 # Folder Structure
 ```
