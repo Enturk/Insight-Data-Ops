@@ -13,6 +13,7 @@ pip install -U python-dotenv
 pip install psycopg2
 pip install psycopg2-binary
 pip install ipython
+source /tmp/.env # copied over during terraformation
 
 # do the thing we're her to do
 mkdir test
