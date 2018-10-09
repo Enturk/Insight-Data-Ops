@@ -5,7 +5,7 @@ This is the project that I worked on during my fellowship with Insight Data in N
 
 A control machine, running Airflow, monitors Terraform, which is currently setup to recreate instances when I update Github and destroy the instances. This recreation works as outlined below: Terraform re-creates an instance, copies over the environment variables, injects a startup script, which in turn sets up the new instance to run the scraping script and pulls it from github. The python script scrapes the data from a court website, and then pushes it to an AWS relational database.
 
-![workflow: Airflow triggers Terraform, which creates a new instance, which pulls the python scraping script from github, the scraping script gets the data from the court website, and pushes it to the AWS relational DB.](https://raw.githubusercontent.com/Enturk/Insight-Data-Ops/Insight-Data-Ops_workflow.png)
+![workflow: Airflow triggers Terraform, which creates a new instance, which pulls the python scraping script from github, the scraping script gets the data from the court website, and pushes it to the AWS relational DB.](https://raw.githubusercontent.com/Enturk/Insight-Data-Ops/master/Insight-Data-Ops_workflow.png)
 
 # Folder Structure
 ```
