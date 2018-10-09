@@ -1,6 +1,7 @@
 /Ignore/
 /test/data.csv
-
+Insight-Data-Ops_workflow.png
+      
 # Compiled files
 *.tfstate
 *.tfstate*
