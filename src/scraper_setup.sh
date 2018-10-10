@@ -19,6 +19,6 @@ mkdir test
 touch test/data.csv
 sudo chown ubuntu test/data.csv
 wget https://raw.githubusercontent.com/Enturk/Insight-Data-Ops/master/src/scraper.py
-source /tmp/.env # copied over during terraformation
+source /home/ubuntu/.env # copied over during terraformation
 # sudo chmod +x scraper.py # only necessary if I want to ./ execute
 python scraper.py
