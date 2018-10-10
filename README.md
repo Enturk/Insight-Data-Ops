@@ -24,8 +24,8 @@ A control machine, running Airflow, monitors Terraform, which is currently setup
 └── README.md
 ```
 
-# Dependencies
-Assuming you have Python 2.7.x or 3.6.x
+# Assumptions (Dependencies)
+Tested with Python 2.7.x on Ubuntu 16.04 LTS
 
 # How to get this going:
 * As appropriate, produce or download public & secret keys, user info, region & host to .env file (not discussed for security reasons...). Dotenv file format should be: 
