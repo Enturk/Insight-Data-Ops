@@ -10,14 +10,16 @@ A control machine, running Airflow, monitors Terraform, which is currently setup
 # Folder Structure
 ```
 .
-├── docs                    # Documentation files (alternatively `doc`)
-│   ├── TOC.md              # Table of contents
-│   ├── misc.md             # Miscellaneous information
-│   ├── schema.md           # Table schemas for your DB
-│   ├── usage.md            # Getting started guide
-├── src                     # Source files (alternatively `lib` or `app`)
-├── test                    # Automated tests (alternatively `spec` or `tests`)
-├── tools                   # Tools and utilities
+├── src                       # Source files
+│   ├── newTerraInst.sh       # Checks, and if needed creates new instance, and injects scraper_setup in it
+│   ├── scraper_setup.sh      # Installation and setup for scraper
+│   ├── scraper.py            # Scrapes and pre-processes data and sends it to RDS
+├── test                      # Automated tests 
+│   ├── git-push-n-destroy.sh # Pushes changed files to github and destroys terraformed instance
+│   ├── sources.txt           # List of websites to be scraped
+├── tools                     # Tools and utilities
+│   ├── airflow               # Airflow directory
+│   ├── terraform             # Terraform directory
 ├── LICENSE
 └── README.md
 ```
