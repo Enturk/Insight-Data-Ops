@@ -39,6 +39,7 @@ headerRow = True
 counter = 0
 schema = []
 rightTable = False
+good_data = 0
 
 for tr in soup.find_all('tr'):
 
@@ -90,7 +91,7 @@ for tr in soup.find_all('tr'):
 
     counter += 1
     caseTable.append(row)
-    if DEBUG and (counter%100 == 0): print("Processing row " + str(counter) + " into list.")
+    if DEBUG and (counter % 100 == 0): print("Processing row " + str(counter) + " into list.")
 
 if DEBUG: print("Processed " + str(counter) + " rows of data, plus a header.")
 
@@ -110,7 +111,7 @@ if DEBUG: print("Data now in csv_file.")
 # If you're reading all of this, you should check this out:
 # https://www.youtube.com/watch?v=LVyOWbrxjHM
 
-# The following is taken from stephenjwilson, who is a better man than I
+# The following is taken from @stephenjwilson, who is a better man than I
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 HOST = os.getenv("POSTGRES_HOST")
