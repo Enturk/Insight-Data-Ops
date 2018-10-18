@@ -4,6 +4,7 @@ import os
 import sys
 #import boto3
 import psycopg2
+import datetime
 
 DEBUG = True
 
@@ -40,7 +41,7 @@ counter = 0
 schema = []
 rightTable = False
 good_data = 0
-
+caseNos = []
 for tr in soup.find_all('tr'):
 
     # process header
@@ -78,19 +79,42 @@ for tr in soup.find_all('tr'):
         + str(len(schema)) + " columns.")
         continue
 
-    # clean up the data list, just in case something got through...
+    # validate & clean up the datat
     row = []
+    i = 0
+    goodRow = True
 
-    # if DEBUG: print("New record: ")
     for td in tds:
-        # TODO trim tds[] elements?
+
+        # check if data bad
         content = td.text.rstrip()
-        # if DEBUG: print("  " + td.text)
-        if content and not content.isspace(): # only appends non-empty data
+        if (
+                content == 'NO OPINIONS FILED TODAY' or
+                content == 'NO OPINIONS TODAY' or
+                content in caseNos
+            ):
+            goodRow = False
+            break
+
+        # update unique id list
+        if i == 1: caseNos.append(content)
+
+        # reformat date
+        isDate = False
+        if content:
+            isDate = len(content) > 7 and len(content) < content.find('/')> 0 and content.find('/') < 3 and content.find('/', 3) != -1 and content.find('/',3) < 7
+        # put date in last column, properly formatted
+        if isDate:
+            content = datetime.datetime.strptime(content, '%m/%d/%Y').strftime('%Y-%m-%d')
+            for n in range(i,7):
+                if n == 6: row.append(content)
+                else: row.append('')
+        else:
             row.append(content)
+        i += 1
 
     counter += 1
-    caseTable.append(row)
+    if goodRow: caseTable.append(row)
     if DEBUG and (counter % 100 == 0): print("Processing row " + str(counter) + " into list.")
 
 if DEBUG: print("Processed " + str(counter) + " rows of data, plus a header.")
@@ -102,11 +126,10 @@ if DEBUG: print("Processed " + str(counter) + " rows of data, plus a header.")
 import csv
 writer = csv.writer(csv_file)
 writer.writerows(caseTable)
+csv_file.close()
 if DEBUG: print("Data now in csv_file.")
 
 # TODO write schema to md file
-# writer = csv.writer() #FIXME need filename and path
-# writer.writerow(schema)
 
 # If you're reading all of this, you should check this out:
 # https://www.youtube.com/watch?v=LVyOWbrxjHM
@@ -134,8 +157,6 @@ except:
 
 # Create table
 cur = conn.cursor()
-# TODO make this with for loop over headers in schema
-# TODO need primary key!
 try:
     cur.execute("""
     CREATE TABLE IF NOT EXISTS public.cases(
@@ -148,18 +169,29 @@ try:
         Datefiled date
     )
     """)
+    # test data
+
+    cur.execute("""INSERT INTO public.cases (CaseTitle, CaseNo, CaseOrigin, AuthoringJudge, CaseType, CaseCode, Datefiled)
+            VALUES ('Nazim v. Nazim', '-7', 'Southern France', 'Unlearned Hand', '', '', '2050-01-01')
+            ON CONFLICT (CaseNo) DO NOTHING;
+            """)
+
+    if DEBUG: print("Uploaded test data.")
+
+    csv_file = open("data.csv", 'r')
 
     # Upload data
-    cur.copy_from(csv_file, 'public.cases', sep=',', columns=('CaseTitle',
-                                                        'CaseNo',
-                                                        'CaseOrigin',
-                                                        'AuthoringJudge',
-                                                        'CaseType',
-                                                        'CaseCode',
-                                                        'Datefiled')) # Bad camel case in source. Don't blame me.
+    copy_sql = """
+               COPY {} FROM stdin WITH CSV HEADER
+               DELIMITER as ','
+               """.format('cases')
+    cur.copy_expert(sql=copy_sql, file=csv_file)
+
+    csv_file.close()
+
     if DEBUG: print("Uploaded csv file to DB. I'm done.")
-except:
+except Exception as e:
+    print(e)
     print("Upload to DB failed. I quit.")
 conn.commit()
 conn.close()
-csv_file.close()
